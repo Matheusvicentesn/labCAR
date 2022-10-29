@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
+import { Driver } from './entities/driver.entity';
 
 @Injectable()
 export class DriversService {
-  private readonly drivers = [];
+  private readonly drivers: Array<Driver> = [];
 
-  public create(createDriverDto: CreateDriverDto) {
+  public create(createDriverDto: CreateDriverDto): Driver {
+    createDriverDto.blocked = false;
     this.drivers.push(createDriverDto);
     return createDriverDto;
   }
 
-  public findAll() {
+  public findAll(): Driver[] {
     return this.drivers;
   }
 
