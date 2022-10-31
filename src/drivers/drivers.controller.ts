@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { DriversService } from './drivers.service';
 
@@ -23,8 +24,8 @@ export class DriversController {
 
   // Buscar todos usuários no ARRAY
   @Get()
-  public findAll() {
-    return this.driversService.findAll();
+  public findAll(@Query('page') page = 0, @Query('size') size = 50) {
+    return this.driversService.findAll(page, size);
   }
 
   // Buscar usuário(s) por nome

@@ -24,8 +24,10 @@ export class DriversService {
   }
 
   // Buscar todos usuários no ARRAY
-  public findAll(): Driver[] {
-    return this.database.getDrivers();
+  public async findAll(page, size) {
+    return await this.database
+      .getDrivers()
+      .slice(page * size, page * size + size);
   }
 
   // Buscar usuário(s) por nome
