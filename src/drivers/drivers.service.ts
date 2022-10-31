@@ -1,7 +1,11 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Database } from 'src/database/database';
 
-import { Driver } from './entities/driver.entity';
+import { Block, Driver } from './entities/driver.entity';
 
 @Injectable()
 export class DriversService {
@@ -24,18 +28,27 @@ export class DriversService {
   }
 
   // Buscar todos usuários no ARRAY
-  public async findAll(page, size) {
+  public async findAll(page, limit) {
     return await this.database
       .getDrivers()
-      .slice(page * size, page * size + size);
+      .slice(page * limit, page * limit + limit);
   }
 
   // Buscar usuário(s) por nome
-  public findOne(id: string) {
-    const user = this.database
+  public async findOne(id: string) {
+    const user = await this.database
       .getDrivers()
       .filter((driver) => driver.name.includes(id));
-    return user;
+
+    if (user.length <= 0) {
+      console.log(user);
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'Users not found',
+      });
+    } else {
+      return user;
+    }
   }
 
   // Buscar usuário por CPF
@@ -46,11 +59,48 @@ export class DriversService {
     return user;
   }
 
-  public update(id: number, Driver: Driver) {
-    return `This action updates a #${id} driver`;
+  public blockDriver(cpf: string) {
+    const user = this.database.getDrivers();
+    const nova = user.map((driver) => {
+      if (driver.CPF === cpf) {
+        driver.blocked = driver.blocked != true;
+      }
+      return driver;
+    });
+    this.database.updateDriver(nova);
+    const userFilter = this.database
+      .getDrivers()
+      .find((driver) => driver.CPF === cpf);
+    return userFilter;
   }
 
-  public remove(id: number) {
-    return `This action removes a #${id} driver`;
+  public remove(cpf: string) {
+    const users = this.database
+      .getDrivers()
+      .filter((driver) => driver.CPF != cpf);
+
+    this.database.deleteDriver(users);
+    return users;
+  }
+
+  public updateDriver(driverBody, cpf) {
+    const drivers = this.database.getDrivers();
+
+    const updateDriver = drivers.map((driver) => {
+      if (driver.CPF === cpf) {
+        driver.name = driverBody.name || driver.name;
+        driver.birth_date = driverBody.birth_date || driver.birth_date;
+        driver.CPF = driverBody.CPF || driver.CPF;
+        driver.license_plate = driverBody.license_plate || driver.license_plate;
+        driver.vehicle_model = driverBody.vehicle_model || driver.vehicle_model;
+        // driver.blocked = driverBody.blocked || driver.blocked;
+      }
+      return driver;
+    });
+    this.database.updateDriver(updateDriver);
+    const userFilter = this.database
+      .getDrivers()
+      .find((driver) => driver.CPF === cpf);
+    return userFilter;
   }
 }

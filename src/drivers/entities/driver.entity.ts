@@ -41,3 +41,7 @@ export class Driver {
   vehicle_model: string;
   blocked: boolean;
 }
+
+export class Block {
+  blocked: boolean;
+}

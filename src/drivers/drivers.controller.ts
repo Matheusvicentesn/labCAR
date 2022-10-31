@@ -7,10 +7,11 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { DriversService } from './drivers.service';
 
-import { Driver } from './entities/driver.entity';
+import { Block, Driver } from './entities/driver.entity';
 
 @Controller('drivers')
 export class DriversController {
@@ -24,8 +25,8 @@ export class DriversController {
 
   // Buscar todos usuários no ARRAY
   @Get()
-  public findAll(@Query('page') page = 0, @Query('size') size = 50) {
-    return this.driversService.findAll(page, size);
+  public findAll(@Query('page') page = 0, @Query('limit') limit = 50) {
+    return this.driversService.findAll(page, limit);
   }
 
   // Buscar usuário(s) por nome
@@ -40,13 +41,19 @@ export class DriversController {
     return this.driversService.findByCPF(cpf);
   }
 
-  @Patch(':id')
-  public update(@Param('id') id: string, @Body() Driver: Driver) {
-    return this.driversService.update(+id, Driver);
+  // Bloquear usuário
+  @Patch('block/:cpf')
+  public blockDriver(@Param('cpf') cpf: string) {
+    return this.driversService.blockDriver(cpf);
   }
 
-  @Delete(':id')
-  public remove(@Param('id') id: string) {
-    return this.driversService.remove(+id);
+  @Put(':cpf')
+  public updateDriver(@Body() Driver: Driver, @Param('cpf') cpf: string) {
+    return this.driversService.updateDriver(Driver, cpf);
+  }
+
+  @Delete(':cpf')
+  public remove(@Param('cpf') cpf: string) {
+    return this.driversService.remove(cpf);
   }
 }

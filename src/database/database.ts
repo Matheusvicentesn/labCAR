@@ -24,4 +24,14 @@ export class Database {
       JSON.stringify([...this.getDrivers(), driver]),
     );
   }
+
+  // Deletar usuário
+  public deleteDriver(driver: Driver[]) {
+    fs.writeFileSync(this.FILENAME, JSON.stringify(driver));
+  }
+
+  // Atualizar usuário
+  public updateDriver(driver: Driver[]) {
+    fs.writeFileSync(this.FILENAME, JSON.stringify(driver));
+  }
 }
