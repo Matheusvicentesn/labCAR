@@ -25,7 +25,7 @@ export class DriversController {
 
   // Buscar todos usuários no ARRAY
   @Get()
-  public findAll(@Query('page') page = 0, @Query('limit') limit = 50) {
+  public findAll(@Query('page') page = 1, @Query('limit') limit = 50) {
     return this.driversService.findAll(page, limit);
   }
 

@@ -17,7 +17,7 @@ export class TripsService {
         message: 'Passenger no exists in the database',
       });
     }
-    trip.trip_status = `CREATED`;
+    trip.trip_status = Status.CREATED;
 
     this.database.writeTrip(trip);
     return trip;
@@ -37,14 +37,15 @@ export class TripsService {
       .slice(page * limit, page * limit + limit);
   }
 
-  public async findOne(page, limit) {
-    return await this.database
+  public async findOne(page, limit, trip) {
+    const viagens = await this.database
       .getTrips()
       .slice(page * limit, page * limit + limit);
-  }
 
-  update(id: number, trip: Trip) {
-    return `This action updates a #${id} trip`;
+    return {
+      driverAdress: trip,
+      nearTrips: viagens,
+    };
   }
 
   remove(id: number) {

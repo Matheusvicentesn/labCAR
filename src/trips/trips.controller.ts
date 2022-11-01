@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { Trip } from './entities/trip.entity';
 import { TripsService } from './trips.service';
@@ -26,14 +27,13 @@ export class TripsController {
     return this.tripsService.findAll(page, limit);
   }
 
-  @Get('/findnear')
-  public findOne(@Query('page') page = 0, @Query('limit') limit = 2) {
-    return this.tripsService.findAll(page, limit);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() trip: Trip) {
-    return this.tripsService.update(+id, trip);
+  @Put('/findnear')
+  public findOne(
+    @Query('page') page = 0,
+    @Query('limit') limit = 3,
+    @Body() trip,
+  ) {
+    return this.tripsService.findOne(page, limit, trip);
   }
 
   @Delete(':id')

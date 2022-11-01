@@ -1,8 +1,8 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 export enum Status {
-  CREATED,
-  ACCEPTED,
-  REFUSED,
+  CREATED = 'CREATED',
+  ACCEPTED = 'ACCEPTED',
+  REFUSED = 'REFUSED',
 }
 
 export class Trip {
@@ -32,5 +32,5 @@ export class Trip {
   })
   destination_address: string;
 
-  trip_status: `CREATED` | `ACCEPTED` | `REFUSED`;
+  trip_status?: Status;
 }

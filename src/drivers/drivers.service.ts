@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Database } from 'src/database/database';
+import { ageValidator } from 'src/utils/ageValidator';
 
 import { Block, Driver } from './entities/driver.entity';
 
@@ -14,10 +15,19 @@ export class DriversService {
   // Cadastar usuário
   public async create(driver: Driver): Promise<Driver> {
     const driverExist = await this.findByCPF(driver.CPF);
+    // Validar se o CPF já existe
     if (driverExist) {
       throw new ConflictException({
         statusCode: 409,
         message: 'CPF already exists in the database',
+      });
+    }
+    // Validar idade do usuário
+    const age = ageValidator(driver.birth_date);
+    if (age < 18) {
+      throw new ConflictException({
+        statusCode: 409,
+        message: 'User must be of legal age',
       });
     }
     driver.blocked = false;
@@ -29,14 +39,14 @@ export class DriversService {
   public async findAll(page, limit) {
     return await this.database
       .getDrivers()
-      .slice(page * limit, page * limit + limit);
+      .slice((page - 1) * limit, page * limit);
   }
 
   // Buscar usuário(s) por nome
   public async findOne(id: string) {
     const user = await this.database
       .getDrivers()
-      .filter((driver) => driver.name.includes(id));
+      .filter((driver) => driver.name.toUpperCase().includes(id.toUpperCase()));
 
     if (user.length <= 0) {
       console.log(user);
@@ -73,12 +83,14 @@ export class DriversService {
   }
 
   public remove(cpf: string) {
-    const users = this.database
+    const drivers = this.database
       .getDrivers()
       .filter((driver) => driver.CPF != cpf);
 
-    this.database.deleteDriver(users);
-    return users;
+    this.database.deleteDriver(drivers);
+    return {
+      message: `User with CPF: ${cpf} has been deleted`,
+    };
   }
 
   public updateDriver(driverBody, cpf) {
