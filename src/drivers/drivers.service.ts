@@ -9,8 +9,6 @@ import { Block, Driver } from './entities/driver.entity';
 
 @Injectable()
 export class DriversService {
-  private readonly drivers: Array<Driver> = [];
-
   constructor(private database: Database) {}
 
   // Cadastar usuário
