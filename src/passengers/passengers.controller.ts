@@ -40,12 +40,6 @@ export class PassengersController {
     return this.passengersService.findByCPF(cpf);
   }
 
-  // Bloquear usuário
-  @Patch('block/:cpf')
-  public blockDriver(@Param('cpf') cpf: string) {
-    return this.passengersService.blockPassenger(cpf);
-  }
-
   @Put(':cpf')
   public updatePassenger(
     @Body() Passenger: Passenger,

@@ -24,23 +24,10 @@ export class Passenger {
   CPF: string;
 
   @IsNotEmpty({
-    message: 'License Plate is required',
+    message: 'addres is required',
   })
   @IsString({
-    message: 'License Plate must be a string',
+    message: 'addres must be a string',
   })
-  license_plate: string;
-
-  @IsNotEmpty({
-    message: 'Vehicle Model date is required',
-  })
-  @IsString({
-    message: 'Vehicle Model date must be a string',
-  })
-  vehicle_model: string;
-  blocked: boolean;
-}
-
-export class Block {
-  blocked: boolean;
+  addres: string;
 }

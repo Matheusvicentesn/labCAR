@@ -19,7 +19,6 @@ export class PassengersService {
         message: 'CPF already exists in the database',
       });
     }
-    passenger.blocked = false;
     this.database.writePassengers(passenger);
     return passenger;
   }
@@ -56,47 +55,30 @@ export class PassengersService {
     return passenger;
   }
 
-  public blockPassenger(cpf: string) {
-    const passenger = this.database.getPassengers();
-    const newList = passenger.map((passenger) => {
-      if (passenger.CPF === cpf) {
-        passenger.blocked = passenger.blocked != true;
-      }
-      return passenger;
-    });
-    this.database.updatePassengers(newList);
-    const passengerFilter = this.database
-      .getPassengers()
-      .find((passenger) => passenger.CPF === cpf);
-    return passengerFilter;
-  }
-
   public remove(cpf: string) {
     const passengers = this.database
       .getPassengers()
       .filter((passenger) => passenger.CPF != cpf);
 
     this.database.deletePassengers(passengers);
-    return passengers;
+    return {
+      message: `User with CPF: ${cpf} has been deleted`,
+    };
   }
 
-  public updatePassenger(passengerDriver, cpf) {
+  public async updatePassenger(passengerBody, cpf) {
     const drivers = this.database.getPassengers();
 
     const updatePassenger = drivers.map((passenger) => {
       if (passenger.CPF === cpf) {
-        passenger.name = passengerDriver.name || passenger.name;
-        passenger.birth_date =
-          passengerDriver.birth_date || passenger.birth_date;
-        passenger.CPF = passengerDriver.CPF || passenger.CPF;
-        passenger.license_plate =
-          passengerDriver.license_plate || passenger.license_plate;
-        passenger.vehicle_model =
-          passengerDriver.vehicle_model || passenger.vehicle_model;
-        // driver.blocked = driverBody.blocked || driver.blocked;
+        passenger.name = passengerBody.name || passenger.name;
+        passenger.birth_date = passengerBody.birth_date || passenger.birth_date;
+        passenger.addres = passengerBody.addres || passenger.addres;
+        passenger.CPF = passengerBody.CPF || passenger.CPF;
       }
       return passenger;
     });
+
     this.database.updatePassengers(updatePassenger);
     const userFilter = this.database
       .getPassengers()
