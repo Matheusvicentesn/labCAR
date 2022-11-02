@@ -1,13 +1,7 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Length,
-  Matches,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
 
-export class Driver {
+export class DriverDTO {
   @ApiProperty({ description: 'User name' })
   @ApiProperty({ example: 'Exemple Name' })
   @IsNotEmpty({
@@ -69,8 +63,4 @@ export class Driver {
     message: 'Vehicle Model date must be a string',
   })
   vehicle_model: string;
-
-  @IsOptional()
-  @ApiHideProperty()
-  blocked?: boolean;
 }

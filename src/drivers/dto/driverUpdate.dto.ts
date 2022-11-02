@@ -1,13 +1,7 @@
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Length,
-  Matches,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
 
-export class Driver {
+export class DriverUpdateDTO {
   @ApiProperty({ description: 'User name' })
   @ApiProperty({ example: 'Exemple Name' })
   @IsNotEmpty({
@@ -33,21 +27,6 @@ export class Driver {
   })
   birth_date: string;
 
-  @ApiProperty({ example: '00000000000' })
-  @IsNotEmpty({
-    message: 'CPF is required',
-  })
-  @IsString({
-    message: 'CPF must be a string',
-  })
-  @Matches(
-    /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
-    {
-      message: 'CPF must have 11 numeric digits without punctuation.',
-    },
-  )
-  CPF: string;
-
   @ApiProperty({ example: 'AAA0A00' })
   @IsNotEmpty({
     message: 'License Plate is required',
@@ -69,8 +48,4 @@ export class Driver {
     message: 'Vehicle Model date must be a string',
   })
   vehicle_model: string;
-
-  @IsOptional()
-  @ApiHideProperty()
-  blocked?: boolean;
 }

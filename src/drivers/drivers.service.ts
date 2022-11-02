@@ -6,7 +6,7 @@ import {
 import { Database } from 'src/database/database';
 import { ageValidator } from 'src/utils/ageValidator';
 
-import { Block, Driver } from './entities/driver.entity';
+import { Driver } from './entities/driver.entity';
 
 @Injectable()
 export class DriversService {
@@ -14,7 +14,9 @@ export class DriversService {
 
   // Cadastar usuário
   public async create(driver: Driver): Promise<Driver> {
-    const driverExist = await this.findByCPF(driver.CPF);
+    const driverExist = await this.database
+      .getDrivers()
+      .find((drivers) => drivers.CPF === driver.CPF);
     // Validar se o CPF já existe
     if (driverExist) {
       throw new ConflictException({
@@ -43,13 +45,14 @@ export class DriversService {
   }
 
   // Buscar usuário(s) por nome
-  public async findOne(id: string) {
+  public async findOne(name: string) {
     const user = await this.database
       .getDrivers()
-      .filter((driver) => driver.name.toUpperCase().includes(id.toUpperCase()));
+      .filter((driver) =>
+        driver.name.toUpperCase().includes(name.toUpperCase()),
+      );
 
     if (user.length <= 0) {
-      console.log(user);
       throw new NotFoundException({
         statusCode: 404,
         message: 'Users not found',
@@ -64,10 +67,18 @@ export class DriversService {
     const user = this.database
       .getDrivers()
       .find((driver) => driver.CPF === cpf);
-    return user;
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'Users not found',
+      });
+    } else {
+      return user;
+    }
   }
 
   public blockDriver(cpf: string) {
+    this.findByCPF(cpf); // validar CPF
     const user = this.database.getDrivers();
     const nova = user.map((driver) => {
       if (driver.CPF === cpf) {
@@ -83,6 +94,7 @@ export class DriversService {
   }
 
   public remove(cpf: string) {
+    this.findByCPF(cpf); // validar CPF
     const drivers = this.database
       .getDrivers()
       .filter((driver) => driver.CPF != cpf);
@@ -94,8 +106,8 @@ export class DriversService {
   }
 
   public updateDriver(driverBody, cpf) {
+    this.findByCPF(cpf); // validar CPF
     const drivers = this.database.getDrivers();
-
     const updateDriver = drivers.map((driver) => {
       if (driver.CPF === cpf) {
         driver.name = driverBody.name || driver.name;

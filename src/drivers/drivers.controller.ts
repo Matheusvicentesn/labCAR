@@ -9,49 +9,72 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DriversService } from './drivers.service';
+import { DriverDTO } from './dto/driver.dto';
+import { DriverUpdateDTO } from './dto/driverUpdate.dto';
 
-import { Block, Driver } from './entities/driver.entity';
+import { Driver } from './entities/driver.entity';
 
+@ApiTags('Drivers')
 @Controller('drivers')
 export class DriversController {
   constructor(private readonly driversService: DriversService) {}
 
-  // Cadastar usuário
+  // Cadastar Motorista
+  @ApiResponse({ status: 409, description: 'CPF Already exist in database' })
   @Post()
-  public create(@Body() Driver: Driver): Promise<Driver> {
+  public create(@Body() Driver: DriverDTO): Promise<Driver> {
     return this.driversService.create(Driver);
   }
 
-  // Buscar todos usuários no ARRAY
+  // Buscar todos Motoristas
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of objects in response JSON. Default = 50',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Number of pages in response JSON. Default = 1',
+    required: false,
+  })
   @Get()
   public findAll(@Query('page') page = 1, @Query('limit') limit = 50) {
     return this.driversService.findAll(page, limit);
   }
 
-  // Buscar usuário(s) por nome
-  @Get(':id')
-  public findOne(@Param('id') id: string) {
-    return this.driversService.findOne(id);
+  // Buscar motorista(s) por nome
+  @ApiResponse({ status: 404, description: 'Driver not found' })
+  @Get(':name')
+  public findOne(@Param('name') name: string) {
+    return this.driversService.findOne(name);
   }
 
-  // Buscar usuário por CPF
+  // Buscar Motorista por CPF
+  @ApiResponse({ status: 404, description: 'Driver not found' })
   @Get('/cpf/:cpf')
   public findByCPF(@Param('cpf') cpf: string) {
     return this.driversService.findByCPF(cpf);
   }
 
-  // Bloquear usuário
+  // Bloquear motorista
+  @ApiResponse({ status: 404, description: 'Driver not found' })
   @Patch('block/:cpf')
   public blockDriver(@Param('cpf') cpf: string) {
     return this.driversService.blockDriver(cpf);
   }
-
+  // Atualizar motorista
+  @ApiResponse({ status: 404, description: 'Driver not found' })
   @Put(':cpf')
-  public updateDriver(@Body() Driver: Driver, @Param('cpf') cpf: string) {
+  public updateDriver(
+    @Body() Driver: DriverUpdateDTO,
+    @Param('cpf') cpf: string,
+  ) {
     return this.driversService.updateDriver(Driver, cpf);
   }
-
+  // Apagar motorista
+  @ApiResponse({ status: 404, description: 'Driver not found' })
   @Delete(':cpf')
   public remove(@Param('cpf') cpf: string) {
     return this.driversService.remove(cpf);
