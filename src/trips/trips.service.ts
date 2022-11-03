@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Database } from 'src/database/database';
+import { TripDTO } from './dto/trip.dto';
 import { Status, Trip } from './entities/trip.entity';
 
 @Injectable()
@@ -7,34 +8,42 @@ export class TripsService {
   constructor(private database: Database) {}
 
   public async create(trip: Trip) {
-    const passenger = this.database
+    const passengerExist = await this.database
       .getPassengers()
-      .find((passenger) => passenger.CPF === trip.CPF);
-    trip.passager_name = passenger.name;
-    if (!passenger.CPF) {
+      .find((passanger) => passanger.CPF === trip.CPF);
+    if (!passengerExist) {
       throw new ConflictException({
         statusCode: 409,
         message: 'Passenger no exists in the database',
       });
     }
+    trip.passager_name = passengerExist.name;
     trip.trip_status = Status.CREATED;
 
     this.database.writeTrip(trip);
-    return trip;
+    return {
+      passager_name: trip?.passager_name,
+      origin_address: trip?.origin_address,
+      destination_address: trip?.destination_address,
+      trip_status: trip?.trip_status,
+    };
   }
 
   public findByCPF(cpf: string) {
-    const passenger = this.database
+    const passengers = this.database
       .getPassengers()
       .find((passenger) => passenger.CPF === cpf);
-    return passenger;
+
+    return passengers;
   }
 
   // Buscar todos usuários no ARRAY
-  public async findAll(page, limit) {
-    return await this.database
+  public async findAll(page, limit): Promise<Trip[]> {
+    const pagination = await this.database
       .getTrips()
       .slice(page * limit, page * limit + limit);
+    console.log(pagination);
+    return pagination;
   }
 
   public async findOne(page, limit, trip) {

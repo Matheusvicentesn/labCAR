@@ -1,19 +1,25 @@
-import { ApiHideProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
 export enum Status {
   CREATED = 'CREATED',
   ACCEPTED = 'ACCEPTED',
   REFUSED = 'REFUSED',
 }
 
-export class Trip {
+export class TripDTO {
+  @ApiProperty({ example: '00000000000' })
   @IsNotEmpty({
     message: 'CPF is required',
   })
   @IsString({
     message: 'CPF must be a string',
   })
-  @ApiHideProperty()
+  @Matches(
+    /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
+    {
+      message: 'CPF must have 11 numeric digits without punctuation.',
+    },
+  )
   CPF: string;
 
   passager_name: string;

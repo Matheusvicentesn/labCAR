@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class Passenger {
+export class PassengerUpdateDTO {
   @ApiProperty({ description: 'User name' })
   @ApiProperty({ example: 'Exemple Name' })
   @IsNotEmpty({
@@ -26,21 +26,6 @@ export class Passenger {
     message: 'Date of birth must be in dd/mm/yyyy format.',
   })
   birth_date: string;
-
-  @ApiProperty({ example: '00000000000' })
-  @IsNotEmpty({
-    message: 'CPF is required',
-  })
-  @IsString({
-    message: 'CPF must be a string',
-  })
-  @Matches(
-    /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
-    {
-      message: 'CPF must have 11 numeric digits without punctuation.',
-    },
-  )
-  CPF: string;
 
   @ApiProperty({ example: 'Rua A' })
   @IsNotEmpty({

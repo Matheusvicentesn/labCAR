@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -12,7 +13,7 @@ import { Driver } from './entities/driver.entity';
 export class DriversService {
   constructor(private database: Database) {}
 
-  // Cadastar usuário
+  // Cadastar Motorista
   public async create(driver: Driver): Promise<Driver> {
     const driverExist = await this.database
       .getDrivers()
@@ -37,62 +38,79 @@ export class DriversService {
     return driver;
   }
 
-  // Buscar todos usuários no ARRAY
-  public async findAll(page, limit) {
-    return await this.database
-      .getDrivers()
-      .slice((page - 1) * limit, page * limit);
+  // Busca Motoristas
+  public async findAll(page, limit, name) {
+    if (page < 1) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'Pagination start with number 1',
+      });
+    } else if (name) {
+      const nameDriver = this.findOne(name);
+      const nameDriverPaginated = (await nameDriver).slice(
+        (page - 1) * limit,
+        page * limit,
+      );
+      return nameDriverPaginated;
+    } else {
+      const pagination = await this.database
+        .getDrivers()
+        .slice((page - 1) * limit, page * limit);
+      return pagination;
+    }
   }
 
-  // Buscar usuário(s) por nome
+  // Buscar motoristas por nome
   public async findOne(name: string) {
-    const user = await this.database
+    const driver = await this.database
       .getDrivers()
       .filter((driver) =>
         driver.name.toUpperCase().includes(name.toUpperCase()),
       );
 
-    if (user.length <= 0) {
+    if (driver.length <= 0) {
       throw new NotFoundException({
         statusCode: 404,
         message: 'Users not found',
       });
     } else {
-      return user;
+      return driver;
     }
   }
 
-  // Buscar usuário por CPF
+  // Buscar motorista por CPF
   public findByCPF(cpf: string) {
-    const user = this.database
+    const driver = this.database
       .getDrivers()
       .find((driver) => driver.CPF === cpf);
-    if (!user) {
+    if (!driver) {
       throw new NotFoundException({
         statusCode: 404,
         message: 'Users not found',
       });
     } else {
-      return user;
+      return driver;
     }
   }
 
+  // Bloquear/Desbloquear Motorista
   public blockDriver(cpf: string) {
     this.findByCPF(cpf); // validar CPF
-    const user = this.database.getDrivers();
-    const nova = user.map((driver) => {
+    const drivers = this.database.getDrivers();
+    const listFiltred = drivers.map((driver) => {
       if (driver.CPF === cpf) {
         driver.blocked = driver.blocked != true;
       }
       return driver;
     });
-    this.database.updateDriver(nova);
-    const userFilter = this.database
+    this.database.updateDriver(listFiltred);
+    const driverFiltred = this.database
       .getDrivers()
       .find((driver) => driver.CPF === cpf);
-    return userFilter;
+    return { driverBlockStatus: driverFiltred.blocked };
   }
 
+  // Deleter Motorista
   public remove(cpf: string) {
     this.findByCPF(cpf); // validar CPF
     const drivers = this.database
@@ -105,6 +123,7 @@ export class DriversService {
     };
   }
 
+  // Atualizar dados Motoristas
   public updateDriver(driverBody, cpf) {
     this.findByCPF(cpf); // validar CPF
     const drivers = this.database.getDrivers();
@@ -115,14 +134,13 @@ export class DriversService {
         driver.CPF = driverBody.CPF || driver.CPF;
         driver.license_plate = driverBody.license_plate || driver.license_plate;
         driver.vehicle_model = driverBody.vehicle_model || driver.vehicle_model;
-        // driver.blocked = driverBody.blocked || driver.blocked;
       }
       return driver;
     });
     this.database.updateDriver(updateDriver);
-    const userFilter = this.database
+    const filtredDriver = this.database
       .getDrivers()
       .find((driver) => driver.CPF === cpf);
-    return userFilter;
+    return filtredDriver;
   }
 }
