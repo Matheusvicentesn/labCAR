@@ -33,6 +33,7 @@ export class DriversService {
         message: 'User must be of legal age',
       });
     }
+    driver.CPF = driver.CPF.replace(/([^\d])+/gim, '');
     driver.blocked = false;
     this.database.writeDriver(driver);
     return driver;

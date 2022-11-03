@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { IsNotEmpty, IsString, Matches } from 'class-validator';
 export enum Status {
   CREATED = 'CREATED',

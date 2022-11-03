@@ -46,7 +46,7 @@ export class TripsService {
     return pagination;
   }
 
-  public async findOne(page, limit, trip) {
+  public async findNear(page, limit, trip) {
     const viagens = await this.database
       .getTrips()
       .slice(page * limit, page * limit + limit);
@@ -55,9 +55,5 @@ export class TripsService {
       driverAdress: trip,
       nearTrips: viagens,
     };
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} trip`;
   }
 }

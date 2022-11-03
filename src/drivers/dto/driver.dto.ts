@@ -27,7 +27,7 @@ export class DriverDTO {
   })
   birth_date: string;
 
-  @ApiProperty({ example: '00000000000' })
+  @ApiProperty({ example: '00000000000 or 000.000.000-00' })
   @IsNotEmpty({
     message: 'CPF is required',
   })
@@ -37,7 +37,8 @@ export class DriverDTO {
   @Matches(
     /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
     {
-      message: 'CPF must have 11 numeric digits without punctuation.',
+      message:
+        'CPF must have 11 numeric digits. Examples: 00000000000 or 000.000.000-00',
     },
   )
   CPF: string;

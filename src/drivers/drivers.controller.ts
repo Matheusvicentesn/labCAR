@@ -57,7 +57,7 @@ export class DriversController {
 
   // Buscar Motorista por CPF
   @ApiResponse({ status: 404, description: 'Driver not found' })
-  @Get('/cpf/:cpf')
+  @Get('/details/:cpf')
   public findByCPF(@Param('cpf') cpf: string) {
     return this.driversService.findByCPF(cpf);
   }

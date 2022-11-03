@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Query,
-  Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Put } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TripDTO } from './dto/trip.dto';
 import { Trip } from './entities/trip.entity';
@@ -37,16 +28,11 @@ export class TripsController {
   }
 
   @Put('/findnear')
-  public findOne(
+  public findNear(
     @Query('page') page = 0,
     @Query('limit') limit = 3,
     @Body() trip,
   ) {
-    return this.tripsService.findOne(page, limit, trip);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tripsService.remove(+id);
+    return this.tripsService.findNear(page, limit, trip);
   }
 }
