@@ -23,6 +23,10 @@ export class DriversController {
 
   // Cadastar Motorista
   @ApiResponse({ status: 409, description: 'CPF Already exist in database' })
+  @ApiResponse({
+    status: 400,
+    description: 'Information sent in the body incorrectly ',
+  })
   @Post()
   public create(@Body() Driver: DriverDTO): Promise<Driver> {
     return this.driversService.create(Driver);
