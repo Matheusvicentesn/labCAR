@@ -1,4 +1,5 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   IsNotEmpty,
   IsOptional,
