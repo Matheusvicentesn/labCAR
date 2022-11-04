@@ -13,7 +13,8 @@ export class PassengersService {
   constructor(private database: Database) {}
 
   // Cadastar Passageiro
-  public async create(passenger: Passenger): Promise<Passenger> {
+  public async create(passenger: Passenger) {
+    passenger.CPF = passenger.CPF.replace(/([^\d])+/gim, '');
     const passengerExist = await this.database
       .getPassengers()
       .find((drivers) => drivers.CPF === passenger.CPF);

@@ -15,6 +15,7 @@ export class DriversService {
 
   // Cadastar Motorista
   public async create(driver: Driver): Promise<Driver> {
+    driver.CPF = driver.CPF.replace(/([^\d])+/gim, '');
     const driverExist = await this.database
       .getDrivers()
       .find((drivers) => drivers.CPF === driver.CPF);
@@ -29,11 +30,11 @@ export class DriversService {
     const age = ageValidator(driver.birth_date);
     if (age < 18) {
       throw new ConflictException({
-        statusCode: 409,
+        statusCode: 400,
         message: 'User must be of legal age',
       });
     }
-    driver.CPF = driver.CPF.replace(/([^\d])+/gim, '');
+
     driver.blocked = false;
     this.database.writeDriver(driver);
     return driver;

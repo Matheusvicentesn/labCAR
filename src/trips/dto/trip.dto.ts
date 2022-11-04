@@ -21,6 +21,9 @@ export class TripDTO {
       message: 'CPF must have 11 numeric digits without punctuation.',
     },
   )
+  @Exclude({
+    toPlainOnly: true,
+  })
   CPF: string;
 
   passager_name: string;

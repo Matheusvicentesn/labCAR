@@ -1,4 +1,5 @@
 import { ApiHideProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 export enum Status {
   CREATED = 'CREATED',
@@ -14,6 +15,9 @@ export class Trip {
     message: 'CPF must be a string',
   })
   @ApiHideProperty()
+  @Exclude({
+    toPlainOnly: true,
+  })
   CPF: string;
 
   passager_name: string;

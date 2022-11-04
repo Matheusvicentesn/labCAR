@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { deserializeArray, plainToInstance } from 'class-transformer';
 import * as fs from 'fs';
 import { Driver } from 'src/drivers/entities/driver.entity';
 import { Passenger } from 'src/passengers/entities/passenger.entity';
@@ -81,6 +82,7 @@ export class Database {
   // buscar passageiro arquivo
   public getTrips(): Array<Trip> {
     const tripsFile = fs.readFileSync(this.FILENAMETRIPS, 'utf-8').toString();
+
     const trip = JSON.parse(tripsFile);
     return trip;
   }

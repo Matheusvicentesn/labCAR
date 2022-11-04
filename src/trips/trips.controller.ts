@@ -20,11 +20,8 @@ export class TripsController {
 
   // Buscar todos usuários no ARRAY
   @Get()
-  public findAll(
-    @Query('page') page = 0,
-    @Query('limit') limit = 50,
-  ): Promise<Trip[]> {
-    return this.tripsService.findAll(page, limit);
+  public findAll(@Query('page') page = 0, @Query('limit') limit = 50) {
+    return this.tripsService.findAll();
   }
 
   @Put('/findnear')

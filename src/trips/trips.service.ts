@@ -33,23 +33,30 @@ export class TripsService {
     const passengers = this.database
       .getPassengers()
       .find((passenger) => passenger.CPF === cpf);
+    // console.log(passengers);
 
     return passengers;
   }
 
-  // Buscar todos usuários no ARRAY
-  public async findAll(page, limit): Promise<Trip[]> {
-    const pagination = await this.database
-      .getTrips()
-      .slice(page * limit, page * limit + limit);
-    console.log(pagination);
-    return pagination;
+  // Buscar todos as viagens no ARRAY
+  public async findAll() {
+    const trips = await this.database.getTrips();
+    trips.map((trip) => {
+      delete trip.CPF;
+      return trip;
+    });
+
+    return trips;
   }
 
   public async findNear(page, limit, trip) {
     const viagens = await this.database
       .getTrips()
       .slice(page * limit, page * limit + limit);
+    viagens.map((trip) => {
+      delete trip.CPF;
+      return trip;
+    });
 
     return {
       driverAdress: trip,
