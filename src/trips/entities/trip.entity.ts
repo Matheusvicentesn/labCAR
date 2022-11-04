@@ -39,4 +39,6 @@ export class Trip {
   destination_address: string;
 
   trip_status?: Status;
+
+  distance?: string;
 }

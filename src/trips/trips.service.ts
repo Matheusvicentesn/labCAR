@@ -54,6 +54,8 @@ export class TripsService {
       .getTrips()
       .slice(page * limit, page * limit + limit);
     viagens.map((trip) => {
+      const distance = (Math.random() * (5 - 1) + 1).toFixed(2);
+      trip.distance = distance + 'km';
       delete trip.CPF;
       return trip;
     });
