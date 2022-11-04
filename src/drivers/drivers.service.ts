@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Database } from 'src/database/database';
-import { ageValidator } from 'src/utils/ageValidator';
+import { ageValidator } from '../utils/ageValidator';
 
 import { Driver } from './entities/driver.entity';
 
