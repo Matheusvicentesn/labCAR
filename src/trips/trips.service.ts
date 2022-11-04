@@ -50,6 +50,7 @@ export class TripsService {
   }
 
   public async findNear(page, limit, trip) {
+    limit = Math.floor(Math.random() * 5);
     const viagens = await this.database
       .getTrips()
       .slice(page * limit, page * limit + limit);
@@ -60,9 +61,16 @@ export class TripsService {
       return trip;
     });
 
-    return {
-      driverAdress: trip,
-      nearTrips: viagens,
-    };
+    if (limit < 1) {
+      return {
+        driverAdress: trip,
+        nearTrips: 'Nenhuma viagem próxima',
+      };
+    } else {
+      return {
+        driverAdress: trip,
+        nearTrips: viagens,
+      };
+    }
   }
 }
