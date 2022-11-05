@@ -24,13 +24,13 @@ export class PassengersService {
         message: 'CPF already exists in the database',
       });
     }
-    const age = ageValidator(passenger.birth_date);
-    if (age < 18) {
-      throw new ConflictException({
-        statusCode: 409,
-        message: 'User must be of legal age',
-      });
-    }
+    // const age = ageValidator(passenger.birth_date);
+    // if (age < 18) {
+    //   throw new ConflictException({
+    //     statusCode: 409,
+    //     message: 'User must be of legal age',
+    //   });
+    // }
     this.database.writePassengers(passenger);
     return passenger;
   }

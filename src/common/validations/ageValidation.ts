@@ -21,6 +21,6 @@ export class AgeValidation implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `User must be of legal age 333`;
+    return `User must be of legal age`;
   }
 }

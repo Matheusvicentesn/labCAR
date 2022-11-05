@@ -26,14 +26,14 @@ export class DriversService {
         message: 'CPF already exists in the database',
       });
     }
-    // Validar idade do usuário
-    const age = ageValidator(driver.birth_date);
-    if (age < 18) {
-      throw new ConflictException({
-        statusCode: 400,
-        message: 'User must be of legal age',
-      });
-    }
+    // // Validar idade do usuário
+    // const age = ageValidator(driver.birth_date);
+    // if (age < 18) {
+    //   throw new ConflictException({
+    //     statusCode: 400,
+    //     message: 'User must be of legal age',
+    //   });
+    // }
 
     driver.blocked = false;
     this.database.writeDriver(driver);
