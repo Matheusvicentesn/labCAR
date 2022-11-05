@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { deserializeArray, plainToInstance } from 'class-transformer';
 import * as fs from 'fs';
 import { Driver } from 'src/drivers/entities/driver.entity';
 import { Passenger } from 'src/passengers/entities/passenger.entity';
@@ -77,9 +76,10 @@ export class Database {
   public updatePassengers(passenger: Passenger[]) {
     fs.writeFileSync(this.FILENAMEPASSENGER, JSON.stringify(passenger));
   }
-  // Passenger
+  // Passengers
 
-  // buscar passageiro arquivo
+  // TRIPS
+  // buscar trips arquivo
   public getTrips(): Array<Trip> {
     const tripsFile = fs.readFileSync(this.FILENAMETRIPS, 'utf-8').toString();
 
@@ -87,7 +87,7 @@ export class Database {
     return trip;
   }
 
-  //  Salvar passageiro no arquivo
+  //  Salvar trips no arquivo
   public writeTrip(trip: Trip) {
     let trips = this.getTrips();
     if (trips) {
@@ -99,12 +99,12 @@ export class Database {
     );
   }
 
-  // Deletar passageiro
+  // Deletar trips
   public deleteTrip(trip: Trip[]) {
     fs.writeFileSync(this.FILENAMETRIPS, JSON.stringify(trip));
   }
 
-  // Atualizar passageiro
+  // Atualizar trips
   public updateTrip(trip: Trip[]) {
     fs.writeFileSync(this.FILENAMETRIPS, JSON.stringify(trip));
   }

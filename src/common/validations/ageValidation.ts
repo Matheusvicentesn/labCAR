@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import {
-  ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
@@ -20,7 +19,7 @@ export class AgeValidation implements ValidatorConstraintInterface {
     return false;
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage() {
     return `User must be of legal age`;
   }
 }
