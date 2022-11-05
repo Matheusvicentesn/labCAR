@@ -1,12 +1,8 @@
-import {
-  IsNotEmpty,
-  IsString,
-  Length,
-  Matches,
-  Validate,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Length, Validate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { AgeValidation } from 'src/common/validations/ageValidation';
+import { CpfValidation } from 'src/common/validations/cpfValidation';
+import { BirthDateValidation } from 'src/common/validations/birthDateValidation';
 
 export class Passenger {
   @ApiProperty({ description: 'User name' })
@@ -29,9 +25,7 @@ export class Passenger {
   @IsString({
     message: 'Birth date must be a string',
   })
-  @Matches(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/, {
-    message: 'Date of birth must be in dd/mm/yyyy format.',
-  })
+  @Validate(BirthDateValidation)
   @Validate(AgeValidation)
   birth_date: string;
 
@@ -42,12 +36,7 @@ export class Passenger {
   @IsString({
     message: 'CPF must be a string',
   })
-  @Matches(
-    /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/,
-    {
-      message: 'CPF must have 11 numeric digits without punctuation.',
-    },
-  )
+  @Validate(CpfValidation)
   CPF: string;
 
   @ApiProperty({ example: 'Rua A' })

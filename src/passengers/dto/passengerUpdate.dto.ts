@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { AgeValidation } from 'src/common/validations/ageValidation';
+import { BirthDateValidation } from 'src/common/validations/birthDateValidation';
 
 export class PassengerUpdateDTO {
   @ApiProperty({ description: 'User name' })
@@ -29,9 +30,7 @@ export class PassengerUpdateDTO {
   @IsString({
     message: 'Birth date must be a string',
   })
-  @Matches(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/, {
-    message: 'Date of birth must be in dd/mm/yyyy format.',
-  })
+  @Validate(BirthDateValidation)
   @Validate(AgeValidation)
   birth_date: string;
 

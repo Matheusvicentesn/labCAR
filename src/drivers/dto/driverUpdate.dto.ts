@@ -1,12 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  Length,
-  Matches,
-  Validate,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Length, Validate } from 'class-validator';
 import { AgeValidation } from 'src/common/validations/ageValidation';
+import { BirthDateValidation } from 'src/common/validations/birthDateValidation';
+import { LicensePlateValidation } from 'src/common/validations/licensePlateValidation';
 
 export class DriverUpdateDTO {
   @ApiProperty({ description: 'User name' })
@@ -29,9 +25,7 @@ export class DriverUpdateDTO {
   @IsString({
     message: 'Birth date must be a string',
   })
-  @Matches(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/, {
-    message: 'Date of birth must be in dd/mm/yyyy format.',
-  })
+  @Validate(BirthDateValidation)
   @Validate(AgeValidation)
   birth_date: string;
 
@@ -42,10 +36,7 @@ export class DriverUpdateDTO {
   @IsString({
     message: 'License Plate must be a string',
   })
-  @Matches(/^[a-zA-Z]{3}[0-9][A-Za-z0-9][0-9]{2}$/, {
-    message:
-      'Vehicle license plate must be in Brazilian format. Example: AAA0A00',
-  })
+  @Validate(LicensePlateValidation)
   license_plate: string;
 
   @ApiProperty({ example: 'Sedan' })

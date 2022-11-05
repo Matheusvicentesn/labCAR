@@ -5,7 +5,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'UserExists', async: true })
+@ValidatorConstraint({ name: 'AgeValidation', async: true })
 @Injectable()
 export class AgeValidation implements ValidatorConstraintInterface {
   validate(value: string): boolean {
