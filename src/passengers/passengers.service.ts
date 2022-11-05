@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Database } from 'src/database/database';
-import { ageValidator } from '../utils/ageValidator';
 import { Passenger } from './entities/passenger.entity';
 
 @Injectable()
@@ -17,20 +16,13 @@ export class PassengersService {
     passenger.CPF = passenger.CPF.replace(/([^\d])+/gim, '');
     const passengerExist = await this.database
       .getPassengers()
-      .find((drivers) => drivers.CPF === passenger.CPF);
+      .find((passengers) => passengers.CPF === passenger.CPF);
     if (passengerExist) {
       throw new ConflictException({
         statusCode: 409,
         message: 'CPF already exists in the database',
       });
     }
-    // const age = ageValidator(passenger.birth_date);
-    // if (age < 18) {
-    //   throw new ConflictException({
-    //     statusCode: 409,
-    //     message: 'User must be of legal age',
-    //   });
-    // }
     this.database.writePassengers(passenger);
     return passenger;
   }
@@ -44,11 +36,11 @@ export class PassengersService {
       });
     } else if (name) {
       const namePassanger = this.findOne(name);
-      const nameDriverPaginated = (await namePassanger).slice(
+      const namePassengerPaginated = (await namePassanger).slice(
         (page - 1) * limit,
         page * limit,
       );
-      return nameDriverPaginated;
+      return namePassengerPaginated;
     } else {
       const pagination = await this.database
         .getPassengers()
@@ -107,13 +99,22 @@ export class PassengersService {
   // Atualizar dados Passageiro
   public async updatePassenger(passengerBody, cpf) {
     this.findByCPF(cpf); // validar CPF
-    const drivers = this.database.getPassengers();
-    const updatePassenger = drivers.map((passenger) => {
+    const passengerExist = await this.database
+      .getPassengers()
+      .find((passenger) => passenger.CPF === passengerBody.CPF);
+    const passengers = this.database.getPassengers();
+    const updatePassenger = passengers.map((passenger) => {
       if (passenger.CPF === cpf) {
         passenger.name = passengerBody.name || passenger.name;
         passenger.birth_date = passengerBody.birth_date || passenger.birth_date;
         passenger.addres = passengerBody.addres || passenger.addres;
         passenger.CPF = passengerBody.CPF || passenger.CPF;
+        if (passengerBody.CPF != cpf && passengerExist) {
+          throw new ConflictException({
+            statusCode: 409,
+            message: 'CPF already exists in the database',
+          });
+        }
       }
       return passenger;
     });
@@ -121,7 +122,7 @@ export class PassengersService {
     this.database.updatePassengers(updatePassenger);
     const userFilter = this.database
       .getPassengers()
-      .find((passenger) => passenger.CPF === cpf);
+      .find((passenger) => passenger.CPF === passengerBody.CPF);
     return userFilter;
   }
 }

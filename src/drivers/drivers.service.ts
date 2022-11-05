@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Database } from 'src/database/database';
-import { ageValidator } from '../utils/ageValidator';
 
 import { Driver } from './entities/driver.entity';
 
@@ -126,23 +125,32 @@ export class DriversService {
   }
 
   // Atualizar dados Motoristas
-  public updateDriver(driverBody, cpf) {
+  public async updateDriver(driverBody, cpf) {
     this.findByCPF(cpf); // validar CPF
+    const driverExist = await this.database
+      .getDrivers()
+      .find((drivers) => drivers.CPF === driverBody.CPF);
     const drivers = this.database.getDrivers();
     const updateDriver = drivers.map((driver) => {
       if (driver.CPF === cpf) {
         driver.name = driverBody.name || driver.name;
         driver.birth_date = driverBody.birth_date || driver.birth_date;
-        driver.CPF = driverBody.CPF || driver.CPF;
         driver.license_plate = driverBody.license_plate || driver.license_plate;
         driver.vehicle_model = driverBody.vehicle_model || driver.vehicle_model;
+        driver.CPF = driverBody.CPF || driver.CPF;
+        if (driverBody.CPF != cpf && driverExist) {
+          throw new ConflictException({
+            statusCode: 409,
+            message: 'CPF already exists in the database',
+          });
+        }
       }
       return driver;
     });
     this.database.updateDriver(updateDriver);
     const filtredDriver = this.database
       .getDrivers()
-      .find((driver) => driver.CPF === cpf);
+      .find((driver) => driver.CPF === driverBody.CPF);
     return filtredDriver;
   }
 }

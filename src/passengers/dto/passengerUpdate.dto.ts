@@ -8,6 +8,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { AgeValidation } from 'src/common/validations/ageValidation';
 import { BirthDateValidation } from 'src/common/validations/birthDateValidation';
+import { CpfValidation } from 'src/common/validations/cpfValidation';
 
 export class PassengerUpdateDTO {
   @ApiProperty({ description: 'User name' })
@@ -22,6 +23,16 @@ export class PassengerUpdateDTO {
     message: 'Name must contain between 5 and 50 characters',
   })
   name: string;
+
+  @ApiProperty({ example: '00000000000 or 000.000.000-00' })
+  @IsNotEmpty({
+    message: 'CPF is required',
+  })
+  @IsString({
+    message: 'CPF must be a string',
+  })
+  @Validate(CpfValidation)
+  CPF: string;
 
   @ApiProperty({ example: '01/01/2000' })
   @IsNotEmpty({
