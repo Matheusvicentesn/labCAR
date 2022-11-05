@@ -27,7 +27,7 @@ export class PassengersController {
 
   // Busca Passageiros
   @ApiQuery({
-    name: 'limit',
+    name: 'size',
     description: 'Number of objects in response JSON. Default = 50',
     required: false,
   })
@@ -39,10 +39,10 @@ export class PassengersController {
   @Get()
   public findAll(
     @Query('page') page = 1,
-    @Query('limit') limit = 50,
+    @Query('size') size = 50,
     @Query('name') name,
   ) {
-    return this.passengersService.findAll(page, limit, name);
+    return this.passengersService.findAll(page, size, name);
   }
 
   // @Get(':id')

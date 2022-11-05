@@ -28,7 +28,7 @@ export class PassengersService {
   }
 
   // Busca Passageiros
-  public async findAll(page, limit, name) {
+  public async findAll(page, size, name) {
     if (page < 1) {
       throw new BadRequestException({
         statusCode: 400,
@@ -37,14 +37,14 @@ export class PassengersService {
     } else if (name) {
       const namePassanger = this.findOne(name);
       const namePassengerPaginated = (await namePassanger).slice(
-        (page - 1) * limit,
-        page * limit,
+        (page - 1) * size,
+        page * size,
       );
       return namePassengerPaginated;
     } else {
       const pagination = await this.database
         .getPassengers()
-        .slice((page - 1) * limit, page * limit);
+        .slice((page - 1) * size, page * size);
       return pagination;
     }
   }

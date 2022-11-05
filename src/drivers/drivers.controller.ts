@@ -34,7 +34,7 @@ export class DriversController {
 
   // Busca Motoristas
   @ApiQuery({
-    name: 'limit',
+    name: 'size',
     description: 'Number of objects in response JSON. Default = 50',
     required: false,
   })
@@ -46,18 +46,11 @@ export class DriversController {
   @Get()
   public findAll(
     @Query('page') page = 1,
-    @Query('limit') limit = 50,
+    @Query('size') size = 50,
     @Query('name') name,
   ) {
-    return this.driversService.findAll(page, limit, name);
+    return this.driversService.findAll(page, size, name);
   }
-
-  // Buscar motorista(s) por nome
-  // @ApiResponse({ status: 404, description: 'Driver not found' })
-  // @Get(':name')
-  // public findOne(@Param('name') name: string) {
-  //   return this.driversService.findOne(name);
-  // }
 
   // Buscar Motorista por CPF
   @ApiResponse({ status: 404, description: 'Driver not found' })

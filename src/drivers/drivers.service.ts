@@ -25,22 +25,13 @@ export class DriversService {
         message: 'CPF already exists in the database',
       });
     }
-    // // Validar idade do usuário
-    // const age = ageValidator(driver.birth_date);
-    // if (age < 18) {
-    //   throw new ConflictException({
-    //     statusCode: 400,
-    //     message: 'User must be of legal age',
-    //   });
-    // }
-
     driver.blocked = false;
     this.database.writeDriver(driver);
     return driver;
   }
 
   // Busca Motoristas
-  public async findAll(page, limit, name) {
+  public async findAll(page, size, name) {
     if (page < 1) {
       throw new BadRequestException({
         statusCode: 400,
@@ -49,14 +40,14 @@ export class DriversService {
     } else if (name) {
       const nameDriver = this.findOne(name);
       const nameDriverPaginated = (await nameDriver).slice(
-        (page - 1) * limit,
-        page * limit,
+        (page - 1) * size,
+        page * size,
       );
       return nameDriverPaginated;
     } else {
       const pagination = await this.database
         .getDrivers()
-        .slice((page - 1) * limit, page * limit);
+        .slice((page - 1) * size, page * size);
       return pagination;
     }
   }

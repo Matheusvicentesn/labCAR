@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Body, Query, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TripDTO } from './dto/trip.dto';
-import { Trip } from './entities/trip.entity';
+import { tripFindNear } from './dto/tripFindNear.tso';
 import { TripsService } from './trips.service';
 
 @ApiTags('Trips')
 @Controller('trips')
 export class TripsController {
   constructor(private readonly tripsService: TripsService) {}
-  // Cadastar Motorista
+  // Cadastar viagem
   @ApiResponse({
     status: 409,
     description: 'Passenger no exists in the database',
@@ -18,18 +18,19 @@ export class TripsController {
     return this.tripsService.create(trip);
   }
 
-  // Buscar todos usuários no ARRAY
+  // Buscar todas as viagens
   @Get()
-  public findAll(@Query('page') page = 0, @Query('limit') limit = 50) {
+  public findAll() {
     return this.tripsService.findAll();
   }
 
-  @Put('/findnear')
+  // Procurar viagens próximas
+  @Post('/findnear')
   public findNear(
     @Query('page') page = 0,
-    @Query('limit') limit = 3,
-    @Body() trip,
+    @Query('size') size = 3,
+    @Body() trip: tripFindNear,
   ) {
-    return this.tripsService.findNear(page, limit, trip);
+    return this.tripsService.findNear(page, size, trip);
   }
 }

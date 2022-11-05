@@ -1,12 +1,17 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { throws } from 'assert';
 import { Database } from 'src/database/database';
-import { TripDTO } from './dto/trip.dto';
+import { DriversService } from 'src/drivers/drivers.service';
 import { Status, Trip } from './entities/trip.entity';
 
 @Injectable()
 export class TripsService {
   constructor(private database: Database) {}
-
+  // Cadastar viagem
   public async create(trip: Trip) {
     const passengerExist = await this.database
       .getPassengers()
@@ -29,16 +34,7 @@ export class TripsService {
     };
   }
 
-  public findByCPF(cpf: string) {
-    const passengers = this.database
-      .getPassengers()
-      .find((passenger) => passenger.CPF === cpf);
-    // console.log(passengers);
-
-    return passengers;
-  }
-
-  // Buscar todos as viagens no ARRAY
+  // Buscar todas as viagens
   public async findAll() {
     const trips = await this.database.getTrips();
     trips.map((trip) => {
@@ -49,11 +45,20 @@ export class TripsService {
     return trips;
   }
 
-  public async findNear(page, limit, trip) {
-    limit = Math.floor(Math.random() * 5);
+  public async findNear(page, size, trip) {
+    const driver = this.database
+      .getDrivers()
+      .find((driver) => driver.CPF === trip.CPF);
+    if (!driver) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'Driver not found',
+      });
+    }
+    size = Math.floor(Math.random() * 5);
     const viagens = await this.database
       .getTrips()
-      .slice(page * limit, page * limit + limit);
+      .slice(page * size, page * size + size);
     viagens.map((trip) => {
       const distance = (Math.random() * (5 - 1) + 1).toFixed(2);
       trip.distance = distance + 'km';
@@ -61,7 +66,7 @@ export class TripsService {
       return trip;
     });
 
-    if (limit < 1) {
+    if (size < 1) {
       return {
         driverAdress: trip,
         nearTrips: 'Nenhuma viagem próxima',
