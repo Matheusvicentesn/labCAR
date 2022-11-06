@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
@@ -33,6 +32,7 @@ export class DriversController {
   }
 
   // Busca Motoristas
+  @ApiResponse({ status: 404, description: 'Driver not found' })
   @ApiQuery({
     name: 'size',
     description: 'Number of objects in response JSON. Default = 50',
@@ -41,6 +41,11 @@ export class DriversController {
   @ApiQuery({
     name: 'page',
     description: 'Number of pages in response JSON. Default = 1',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'name',
+    description: 'Search Drivers by name',
     required: false,
   })
   @Get()
@@ -67,6 +72,7 @@ export class DriversController {
   }
   // Atualizar motorista
   @ApiResponse({ status: 404, description: 'Driver not found' })
+  @ApiResponse({ status: 409, description: 'CPF Already exist in database' })
   @Put(':cpf')
   public updateDriver(
     @Body() Driver: DriverUpdateDTO,

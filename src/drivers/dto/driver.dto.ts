@@ -30,7 +30,7 @@ export class DriverDTO {
   @Validate(AgeValidation)
   birth_date: string;
 
-  @ApiProperty({ example: '00000000000 or 000.000.000-00' })
+  @ApiProperty({ example: '00000000000' })
   @IsNotEmpty({
     message: 'CPF is required',
   })

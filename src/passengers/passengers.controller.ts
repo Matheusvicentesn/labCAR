@@ -20,12 +20,17 @@ export class PassengersController {
 
   // Cadastar Passageiro
   @ApiResponse({ status: 409, description: 'CPF Already exist in database' })
+  @ApiResponse({
+    status: 400,
+    description: 'Information sent in the body incorrectly ',
+  })
   @Post()
   public create(@Body() Passenger: Passenger): Promise<Passenger> {
     return this.passengersService.create(Passenger);
   }
 
   // Busca Passageiros
+  @ApiResponse({ status: 404, description: 'Passenger not found' })
   @ApiQuery({
     name: 'size',
     description: 'Number of objects in response JSON. Default = 50',
@@ -34,6 +39,11 @@ export class PassengersController {
   @ApiQuery({
     name: 'page',
     description: 'Number of pages in response JSON. Default = 1',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'name',
+    description: 'Search Drivers by name',
     required: false,
   })
   @Get()
@@ -45,19 +55,16 @@ export class PassengersController {
     return this.passengersService.findAll(page, size, name);
   }
 
-  // @Get(':id')
-  // public findOne(@Param('id') id: string) {
-  //   return this.passengersService.findOne(id);
-  // }
-
-  // Buscar usuário por CPF
+  // Buscar passageiro por CPF
   @ApiResponse({ status: 404, description: 'Driver not found' })
   @Get('/details/:cpf')
   public findByCPF(@Param('cpf') cpf: string) {
     return this.passengersService.findByCPF(cpf);
   }
+
   // Atualizar passageiro
   @ApiResponse({ status: 404, description: 'Driver not found' })
+  @ApiResponse({ status: 409, description: 'CPF Already exist in database' })
   @Put(':cpf')
   public updatePassenger(
     @Body() Passenger: PassengerUpdateDTO,

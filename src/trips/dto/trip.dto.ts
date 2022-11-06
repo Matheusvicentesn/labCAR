@@ -22,8 +22,16 @@ export class TripDTO {
   })
   CPF: string;
 
+  @ApiProperty({ example: 'Name example' })
+  @IsNotEmpty({
+    message: 'passager_name is required',
+  })
+  @IsString({
+    message: 'passager_name must be a string',
+  })
   passager_name: string;
 
+  @ApiProperty({ example: 'Street A' })
   @IsNotEmpty({
     message: 'origin_address is required',
   })
@@ -32,6 +40,7 @@ export class TripDTO {
   })
   origin_address: string;
 
+  @ApiProperty({ example: 'Street B' })
   @IsNotEmpty({
     message: 'destination_address is required',
   })
@@ -39,6 +48,4 @@ export class TripDTO {
     message: 'destination_address must be a string',
   })
   destination_address: string;
-
-  trip_status?: Status;
 }

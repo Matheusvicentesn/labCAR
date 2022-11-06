@@ -13,11 +13,12 @@ export class tripFindNear {
   @Validate(CpfValidation)
   CPF: string;
 
+  @ApiProperty({ example: 'Street C' })
   @IsNotEmpty({
-    message: 'destination_address is required',
+    message: 'driverAdress is required',
   })
   @IsString({
-    message: 'destination_address must be a string',
+    message: 'driverAdress must be a string',
   })
   driverAdress: string;
 }

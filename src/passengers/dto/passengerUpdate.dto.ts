@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsString,
-  Length,
-  Matches,
-  Validate,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Length, Validate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { AgeValidation } from 'src/common/validations/ageValidation';
 import { BirthDateValidation } from 'src/common/validations/birthDateValidation';
@@ -24,7 +18,7 @@ export class PassengerUpdateDTO {
   })
   name: string;
 
-  @ApiProperty({ example: '00000000000 or 000.000.000-00' })
+  @ApiProperty({ example: '00000000000' })
   @IsNotEmpty({
     message: 'CPF is required',
   })

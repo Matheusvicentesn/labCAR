@@ -19,7 +19,7 @@ export class DriverUpdateDTO {
   })
   name: string;
 
-  @ApiProperty({ example: '00000000000 or 000.000.000-00' })
+  @ApiProperty({ example: '00000000000' })
   @IsNotEmpty({
     message: 'CPF is required',
   })

@@ -20,14 +20,14 @@ export class TripsController {
 
   // Buscar todas as viagens
   @Get()
-  public findAll() {
+  public findAll(): Promise<TripDTO[]> {
     return this.tripsService.findAll();
   }
 
   // Procurar viagens próximas
   @Post('/findnear')
   public findNear(
-    @Query('page') page = 0,
+    @Query('page') page = 1,
     @Query('size') size = 3,
     @Body() trip: tripFindNear,
   ) {

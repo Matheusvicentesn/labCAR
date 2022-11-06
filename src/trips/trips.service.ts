@@ -43,7 +43,7 @@ export class TripsService {
     return trips;
   }
 
-  public async findNear(page, size, trip) {
+  public async findNear(page: number, size: number, trip) {
     const driver = this.database
       .getDrivers()
       .find((driver) => driver.CPF === trip.CPF);
