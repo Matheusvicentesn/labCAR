@@ -3,9 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { throws } from 'assert';
 import { Database } from 'src/database/database';
-import { DriversService } from 'src/drivers/drivers.service';
 import { Status, Trip } from './entities/trip.entity';
 
 @Injectable()

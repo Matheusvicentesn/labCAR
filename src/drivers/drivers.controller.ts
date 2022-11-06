@@ -61,7 +61,7 @@ export class DriversController {
 
   // Bloquear motorista
   @ApiResponse({ status: 404, description: 'Driver not found' })
-  @Patch('block/:cpf')
+  @Get('block/:cpf')
   public blockDriver(@Param('cpf') cpf: string) {
     return this.driversService.blockDriver(cpf);
   }

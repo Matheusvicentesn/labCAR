@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Database } from 'src/database/database';
+import { DriverUpdateDTO } from './dto/driverUpdate.dto';
 
 import { Driver } from './entities/driver.entity';
 
@@ -31,7 +32,7 @@ export class DriversService {
   }
 
   // Busca Motoristas
-  public async findAll(page, size, name) {
+  public async findAll(page, size, name): Promise<Driver[]> {
     if (page < 1) {
       throw new BadRequestException({
         statusCode: 400,
@@ -53,7 +54,7 @@ export class DriversService {
   }
 
   // Buscar motoristas por nome
-  public async findOne(name: string) {
+  public async findOne(name: string): Promise<Driver[]> {
     const driver = await this.database
       .getDrivers()
       .filter((driver) =>
@@ -116,7 +117,7 @@ export class DriversService {
   }
 
   // Atualizar dados Motoristas
-  public async updateDriver(driverBody, cpf) {
+  public async updateDriver(driverBody, cpf): Promise<DriverUpdateDTO> {
     this.findByCPF(cpf); // validar CPF
     const driverExist = await this.database
       .getDrivers()
