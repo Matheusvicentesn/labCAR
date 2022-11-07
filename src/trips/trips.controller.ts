@@ -28,7 +28,7 @@ export class TripsController {
   @Post('/findnear')
   public findNear(
     @Query('page') page = 1,
-    @Query('size') size = 3,
+    @Query('size') size = 5,
     @Body() trip: tripFindNear,
   ) {
     return this.tripsService.findNear(page, size, trip);
