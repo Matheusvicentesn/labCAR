@@ -57,7 +57,7 @@ export class PassengersController {
 
   // Buscar passageiro por CPF
   @ApiResponse({ status: 404, description: 'Driver not found' })
-  @Get('/details/:cpf')
+  @Get(':cpf')
   public findByCPF(@Param('cpf') cpf: string) {
     return this.passengersService.findByCPF(cpf);
   }

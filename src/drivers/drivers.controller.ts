@@ -7,6 +7,7 @@ import {
   Delete,
   Query,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DriversService } from './drivers.service';
@@ -59,14 +60,14 @@ export class DriversController {
 
   // Buscar Motorista por CPF
   @ApiResponse({ status: 404, description: 'Driver not found' })
-  @Get('/details/:cpf')
+  @Get(':cpf')
   public findByCPF(@Param('cpf') cpf: string) {
     return this.driversService.findByCPF(cpf);
   }
 
   // Bloquear motorista
   @ApiResponse({ status: 404, description: 'Driver not found' })
-  @Get('block/:cpf')
+  @Patch(':cpf')
   public blockDriver(@Param('cpf') cpf: string) {
     return this.driversService.blockDriver(cpf);
   }

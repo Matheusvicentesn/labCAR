@@ -13,19 +13,17 @@ export class TripsService {
   public async create(trip: Trip) {
     const passengerExist = await this.database
       .getPassengers()
-      .find((passanger) => passanger.CPF === trip.CPF);
+      .find((passanger) => passanger.CPF === trip.passenger_CPF);
     if (!passengerExist) {
       throw new ConflictException({
         statusCode: 409,
         message: 'Passenger no exists in the database',
       });
     }
-    trip.passager_name = passengerExist.name;
     trip.trip_status = Status.CREATED;
 
     this.database.writeTrip(trip);
     return {
-      passager_name: trip?.passager_name,
       origin_address: trip?.origin_address,
       destination_address: trip?.destination_address,
       trip_status: trip?.trip_status,
@@ -36,7 +34,7 @@ export class TripsService {
   public async findAll() {
     const trips = await this.database.getTrips();
     trips.map((trip) => {
-      delete trip.CPF;
+      delete trip.passenger_CPF;
       return trip;
     });
 
@@ -46,7 +44,7 @@ export class TripsService {
   public async findNear(page: number, size: number, trip) {
     const driver = this.database
       .getDrivers()
-      .find((driver) => driver.CPF === trip.CPF);
+      .find((driver) => driver.CPF === trip.driver_CPF);
     if (!driver) {
       throw new NotFoundException({
         statusCode: 404,
@@ -60,7 +58,7 @@ export class TripsService {
     viagens.map((trip) => {
       const distance = (Math.random() * (5 - 1) + 1).toFixed(2);
       trip.distance = distance + 'km';
-      delete trip.CPF;
+      delete trip.passenger_CPF;
       return trip;
     });
 

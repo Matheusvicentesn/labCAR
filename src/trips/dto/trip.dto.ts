@@ -20,16 +20,7 @@ export class TripDTO {
   @Exclude({
     toPlainOnly: true,
   })
-  CPF: string;
-
-  @ApiProperty({ example: 'Name example' })
-  @IsNotEmpty({
-    message: 'passager_name is required',
-  })
-  @IsString({
-    message: 'passager_name must be a string',
-  })
-  passager_name: string;
+  passenger_CPF: string;
 
   @ApiProperty({ example: 'Street A' })
   @IsNotEmpty({

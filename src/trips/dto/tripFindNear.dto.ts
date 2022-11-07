@@ -11,7 +11,7 @@ export class tripFindNear {
     message: 'CPF must be a string',
   })
   @Validate(CpfValidation)
-  CPF: string;
+  driver_CPF: string;
 
   @ApiProperty({ example: 'Street C' })
   @IsNotEmpty({

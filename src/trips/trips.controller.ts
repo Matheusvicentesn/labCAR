@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TripDTO } from './dto/trip.dto';
-import { tripFindNear } from './dto/tripFindNear.tso';
+import { tripFindNear } from './dto/tripFindNear.dto';
 import { TripsService } from './trips.service';
 
 @ApiTags('Trips')
