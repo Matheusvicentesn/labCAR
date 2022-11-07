@@ -5,8 +5,8 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <h3 align="center">Projeto 1 Modulo backend DEVInHouse (Intelbras)</p>
-    <h3 align="center">
+  <h3 align="center">Projeto 1 Modulo backend DEVInHouse (Intelbras)</h3>
+    <p align="center">
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black
 " alt="" />
 <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="" />
@@ -16,12 +16,12 @@
 " alt="" />
 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white
 " alt="" />
-
-
+</p>
 
 ## Rodando o projeto
 
 ### Clonando repositório
+
 ```bash
 git clone https://github.com/Matheusvicentesn/labCAR.git .
 ```
@@ -33,15 +33,18 @@ npm install
 ```
 
 ## Iniciando aplicação
+
 ```bash
 npm run start:dev
 ```
 
 ## Acessando documentação
+
 ```bash
 # Podendo ser acessada via navegador e outros clientes, ex: Postman,Insomnia
 localhost:3000/api#/
 ```
+
 <p align="center">
   <img src="readmeFiles/img4.jpg" width="500" alt="" />
 </p>
@@ -49,20 +52,22 @@ localhost:3000/api#/
 Caso queiram importar o arquivo Insomina com todos endpoints configurados basta importar a configuração.
 
 Ir na opção de importar coleção por arquivo:
+
 <p align="center">
   <img src="readmeFiles/img1.jpg" width="500" alt="" />
 </p>
 
 Selecionar o arquivo que está na pasta clonada do projeto, readmeFiles>labCAR_Endpoints.json
+
 <p align="center">
   <img src="readmeFiles/img2.jpg" width="500" alt="" />
 </p>
 
 Pronto, todos os endPoints estarão configurados
+
 <p align="center">
   <img src="readmeFiles/img3.jpg" width="500" alt="" />
 </p>
-
 
 ### Melhorias que poderão ser feitas no projeto posteriormente.
 
