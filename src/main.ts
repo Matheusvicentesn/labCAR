@@ -22,7 +22,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-
-  await app.listen(3000);
+  
+  const PORT = process.env.PORT || 3030
+  await app.listen(PORT);
+  console.log(`app runing on ${PORT}. Open http://localhost:${PORT} to see results`)
+  
 }
 bootstrap();
